@@ -49,14 +49,14 @@ First extract distortion matrix from previous checkboard undistortion. Apply the
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to get the binary image, including sobel, maginitute and direction with different threshold. Functions are defined in section "useful functions". Code to combine the binary and color thresholds are in secton "color/gradient combination". I am using the following thresholds:
+I used a combination of color and gradient thresholds to get the binary image, including sobel, maginitute and direction with different threshold. Functions are defined in section "useful functions". Code to combine the binary and color thresholds are in secton "color/gradient combination". I tried HLS first and found that sometimes it couldn't detect correct spots for the lane due to the shades. So I changed to RGB and tuned the threshold. I am using the following thresholds:
 
 | color/gradient | threshold |
 |:--------------:|:---------:|
-|sobel           |  20, 100  |
-| mag            |  20, 100  |
+|sobel           |  30, 60  |
+| mag            |  30, 60  |
 | dir            |  0.7，1.3 |
-| hls            |  180, 255 |
+| rgb            |  220, 255 |
 
 ![alt text][image4]
 
@@ -106,4 +106,4 @@ Here's a [link to my video result](./outproject_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-In the video, I found that if the cars run into the shade area or the road has both dark color and light color or the lane is not so clear, the boundary of the color may confuses the code. Since the detected results is significantly different from correct lane lines, code will do blind window search. However the shade part still may be treated as real lane starting point, leading to a failure. I think one way to make it robust is to take the histogram of previous several frames into account. A combined histogram will have a much larger y at the real lane position which could be helpful to identify the position.
+In the video, I found that if the cars run into the shade area or the road has both dark color and light color or the lane is not so clear, the boundary of the color may confuses the code. Since the detected results is significantly different from correct lane lines, code will do blind window search. However the shade part still may be treated as real lane starting point, leading to a failure. By switching to other color space, such as RGB, the code is much more robust. Also I took a look at the challenge video, and the lanes in that video has abrupt turns with very curvy lanes. I'd think 2nd order polyfit may not work well here, maybe higher order polyfit would help.
